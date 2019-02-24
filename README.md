@@ -2,7 +2,7 @@
 
 A dockerized version of [hessu's aprsc](http://aprs-is.net/) APRS-IS server. [APRS-IS](http://aprs-is.net/) connects regional APRS packet radio networks together through the Internet. The original source for `aprsc` lives [here](https://github.com/hessu/aprsc).
 
-![APRSC Screenshot](.images/aprs-screenshot.png)
+![APRSC Screenshot](.images/aprsc-screenshot.png)
 
 ## Install
 
