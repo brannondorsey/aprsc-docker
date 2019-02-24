@@ -1,0 +1,123 @@
+# Configuration for aprsc, an APRS-IS server for core servers
+
+# Your unique server ID
+ServerId   NOCALL
+# Passcode for the server ID
+PassCode   0
+# Who is running this server?
+MyAdmin    "My Name, MYCALL"
+# The email address where the admin can be reached
+MyEmail    email@example.com
+
+### Directories #########
+# Data directory (for persistent state files - currently none)
+RunDir data
+
+# If logging to a file (-o file), enable built-in log rotation.
+# LogRotate <megabytes> <filecount>
+# "LogRotate 10 5" keeps 5 old files of 10 megabytes each.
+LogRotate 1000 1
+
+### Intervals and timers #########
+# Interval specification format examples:
+# 600 (600 seconds), or 600s, 5m, 2h, 1h30m, 1d3h15m24s, etc...
+
+# When no data is received from an upstream server in N seconds, switch to
+# another server.
+UpstreamTimeout		15s
+
+# When no data is received from a downstream server in N seconds, disconnect
+ClientTimeout		48h
+
+### TCP listener ##########
+# Listen <socketname> <porttype> tcp <address to bind> <port> <options...>
+#	socketname: any name you wish to show up in logs and statistics
+#	porttype: one of:
+#		fullfeed - everything, after dupe filtering
+#		igate - igate / client port with user-specified filters
+#		udpsubmit - UDP packet submission port (8080)
+#		dupefeed - duplicate packets dropped by the server
+#	options:
+#		filter "m/500" - force a filter for users connected here
+#		maxclients 100 - limit clients connected on this port
+#		acl etc/client.acl - match client addresses against ACL
+#		hidden - don't show the port in the status page
+#
+#              If you wish to provide UDP service for clients, set up a
+#              second listener on the same address, port and protocol.
+#
+#              The  "::"  is IPv6 "IN6ADDR_ANY", whereas "0.0.0.0" is same
+#              with IPv4.
+#
+#              On FreeBSD you need to have separate listeners for IPv4 and
+#              IPv6. On Linux, just use :: alone - the IPv6 listener will
+#              catch the IPv4 connections just as well.
+#
+# Example of normal server ports for Linux, supporting both TCP and UDP,
+# IPv4 and IPv6:
+# 
+Listen "Full feed"                                fullfeed tcp ::  10152 hidden
+Listen ""                                         fullfeed udp ::  10152 hidden
+
+Listen "Client-Defined Filters"                   igate tcp ::  14580
+Listen ""                                         igate udp ::  14580
+
+#Listen "350 km from my position"                 igate tcp ::  20350 filter "m/350"
+#Listen ""                                        igate udp ::  20350 filter "m/350"
+
+Listen "UDP submit"                               udpsubmit udp :: 8080
+
+### Uplink configuration ########
+# Uplink <name> <type> tcp <address> <port>
+#	name: a name of the server or service you're connecting to
+#	type: one of:
+#		full - full feed
+#		ro   - read-only, do not transmit anything upstream
+#
+# If you wish to specify multiple alternative servers, use multiple
+# Uplink lines, one for each server.
+#
+# Normally a single line for the 'rotate' address is fine - it will connect
+# to one of the servers in a random fashion and go for another one should
+# the first one become unavailable.
+#
+#Uplink "Core rotate" full  tcp  rotate.aprs.net 10152
+#Uplink "Core rotate" ro    tcp  rotate.aprs.net 10152
+
+# OPTIONAL: Bind source address before connecting to an uplink
+# You can enter two addresses, one for IPv4 and one for IPv6 connections.
+# Needed if you have multiple IP addresses on your server and only one
+# of them is allowed to connect by the remote server.
+#UplinkBind 127.0.0.1
+#UplinkBind ::1
+
+### HTTP server ##########
+# HTTPStatus port provides a status view to web browsers.
+# IPv6+IPv4 support works slightly differently than in Listen:
+# :: is "all addresses" for IPv6, 0.0.0.0 for IPv4, but
+# :: only works if you actually have a global IPv6 address
+# configured on the system.
+# The example is for IPv4, change the address to :: if you have
+# IPv6. For FreeBSD, or if you wish to support multiple specific
+# ports/addresses, use multiple HTTPStatus directives for each.
+HTTPStatus 0.0.0.0 14501
+# HTTPUpload port allows position uploads over HTTP
+HTTPUpload 0.0.0.0 8080
+
+### Environment ############
+# When running this server as super-user, the server can (in many systems)
+# increase several resource limits, and do other things that less privileged
+# server can not do.
+#
+# The FileLimit is resource limit on how many simultaneous connections and
+# some other internal resources the system can use at the same time.
+# If the server is not being run as super-user, this setting has no effect
+# in case it is above what normal user can set.
+#
+FileLimit        10000
+
+### Operator attention span qualification run ###########
+# After configuring the rest of the settings, remove this bad command
+# from the configuration file. It's here only to avoid starting the
+# server up accidentally with an invalid configuration.
+MagicBadness	42.7

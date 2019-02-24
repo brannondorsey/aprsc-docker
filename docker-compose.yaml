@@ -1,0 +1,15 @@
+version: '3'
+services:
+  aprsc:
+    build: .
+    volumes:
+      - "./aprsc:/etc/default/aprsc"
+      - "./aprsc.conf:/opt/aprsc/etc/aprsc.conf"
+      - "./logs:/opt/aprsc/logs"
+      - "./data:/opt/aprsc/data"
+    ports:
+      - 8080:8080
+      - 10152:10152
+      - 14501:14501
+      - 14580:14580
+    privileged: true

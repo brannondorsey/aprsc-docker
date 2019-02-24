@@ -1,0 +1,5 @@
+aprsc.conf
+data/*
+!data/.gitkeep
+logs/*
+!logs/.gitkeep
