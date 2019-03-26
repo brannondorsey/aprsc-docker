@@ -1,4 +1,4 @@
-aprsc.conf
+config/aprsc.conf
 data/*
 !data/.gitkeep
 logs/*

@@ -11,9 +11,8 @@ RUN echo "deb http://aprsc-dist.he.fi/aprsc/apt jessie main" > /etc/apt/sources.
     apt-get update && \
     apt-get install -y aprsc
 
-# change the aprsc user's uid to 1000 so that volume permissions translate
-# between the first non-root user on the host
-RUN usermod -u 1000 aprsc
+ADD config/aprsc /etc/default/aprsc
+ADD config/aprsc.conf.example /opt/aprsc/etc/aprsc.conf
 
 # start the service and follow the logs so that container doesn't exit
 CMD service aprsc start && tail -F /opt/aprsc/logs/aprsc.log

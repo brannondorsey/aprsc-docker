@@ -2,11 +2,7 @@ version: '3'
 services:
   aprsc:
     build: .
-    volumes:
-      - "./aprsc:/etc/default/aprsc"
-      - "./aprsc.conf:/opt/aprsc/etc/aprsc.conf"
-      - "./logs:/opt/aprsc/logs"
-      - "./data:/opt/aprsc/data"
+    image: brannondorsey/aprsc:k8s
     ports:
       - 8080:8080
       - 10152:10152
