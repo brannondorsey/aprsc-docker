@@ -1,12 +1,16 @@
-# debian 8 is the most recent debian version that aprsc supports
-FROM debian:jessie-slim
+# debian 11 is the most recent debian version that aprsc supports
+FROM debian:bullseye-slim
+
+# Install requirements
+RUN apt-get update && \
+    apt-get install -y gnupg
 
 # add the deb source
 # add the signing key
 # apt update
 # install the aprsc debian package
-RUN echo "deb http://aprsc-dist.he.fi/aprsc/apt jessie main" > /etc/apt/sources.list.d/aprsc.list && \
-    gpg --keyserver keys.gnupg.net --recv 657A2B8D && \
+RUN echo "deb http://aprsc-dist.he.fi/aprsc/apt bullseye main" > /etc/apt/sources.list.d/aprsc.list && \
+    gpg --keyserver keyserver.ubuntu.com --recv C51AA22389B5B74C3896EF3CA72A581E657A2B8D && \
     gpg --export C51AA22389B5B74C3896EF3CA72A581E657A2B8D | apt-key add - && \
     apt-get update && \
     apt-get install -y aprsc
