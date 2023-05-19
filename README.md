@@ -28,3 +28,8 @@ docker compose logs -f
 ```
 
 You should now have an HTTP status server running at <http://localhost:14501>.
+
+```bash
+# shutdown
+docker compose down
+```
